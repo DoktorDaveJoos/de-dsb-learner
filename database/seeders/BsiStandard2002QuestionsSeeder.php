@@ -12,9 +12,9 @@ class BsiStandard2002QuestionsSeeder extends Seeder
     public function run(): void
     {
         $module = Module::firstOrCreate(
-            ['slug' => 'it-grundschutz'],
+            ['slug' => 'm2-bsi-grundschutz'],
             [
-                'name' => 'IT-Grundschutz',
+                'name' => 'M2 - BSI Grundschutz',
                 'description' => 'Fragen zum BSI IT-Grundschutz und den zugehörigen Standards.',
             ]
         );
