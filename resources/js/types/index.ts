@@ -1,5 +1,3 @@
-export type * from './auth';
-
 export type Answer = {
     id: number;
     text: string;
