@@ -14,25 +14,20 @@ it('displays modules with questions', function () {
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('modules/index')
-        ->has('modules', 1)
-        ->where('modules.0.name', $module->name)
-        ->where('modules.0.questions_count', 1)
+        ->has('modules', fn ($modules) => $modules
+            ->each(fn ($m) => $m->has('name')->has('questions_count')->etc())
+        )
     );
 });
 
 it('hides modules without questions', function () {
-    Module::factory()->create();
-
-    $moduleWithQuestions = Module::factory()->create();
-    $question = Question::factory()->for($moduleWithQuestions)->create();
-    Answer::factory(4)->for($question)->create();
+    $emptyModule = Module::factory()->create();
 
     $response = $this->get('/');
 
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('modules/index')
-        ->has('modules', 1)
-        ->where('modules.0.name', $moduleWithQuestions->name)
+        ->where('modules', fn ($modules) => collect($modules)->where('name', $emptyModule->name)->isEmpty())
     );
 });

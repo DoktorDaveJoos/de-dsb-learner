@@ -11,8 +11,8 @@ it('has many questions', function () {
     expect($module->questions->first()->id)->toBe($questions->first()->id);
 });
 
-it('generates a slug', function () {
-    $module = Module::factory()->create(['name' => 'IT-Grundschutz', 'slug' => 'it-grundschutz']);
+it('stores a slug', function () {
+    $module = Module::factory()->create(['name' => 'Netzwerksicherheit', 'slug' => 'netzwerksicherheit']);
 
-    expect($module->slug)->toBe('it-grundschutz');
+    expect($module->slug)->toBe('netzwerksicherheit');
 });
