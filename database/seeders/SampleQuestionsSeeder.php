@@ -23,7 +23,8 @@ class SampleQuestionsSeeder extends Seeder
             [
                 'text' => 'Welche Dokumente sind für den Einstieg in den IT-Grundschutz erforderlich oder hilfreich?',
                 'explanation' => 'Der BSI-Standard 200-2 beschreibt die IT-Grundschutz-Methodik und das IT-Grundschutz-Kompendium enthält die Bausteine mit Anforderungen. Der BSI-Standard 100-4 ist veraltet (ersetzt durch 200-4) und die BSI TR-03161 behandelt ein anderes Thema.',
-                'source' => 'BSI-Standard 200-2, Kapitel 2',
+                'quote' => 'Hierfür liefern die IT-Grundschutz-Methodik und das IT-Grundschutz-Kompendium zentrale Hinweise und praktische Umsetzungshilfen.',
+                'source' => 'BSI-Standard 200-2, Kapitel 1.4, S. 9',
                 'answers' => [
                     ['text' => 'BSI-Standard 200-2', 'is_correct' => true],
                     ['text' => 'IT-Grundschutz-Kompendium', 'is_correct' => true],
@@ -34,7 +35,8 @@ class SampleQuestionsSeeder extends Seeder
             [
                 'text' => 'Was beschreibt der BSI-Standard 200-1?',
                 'explanation' => 'Der BSI-Standard 200-1 definiert die allgemeinen Anforderungen an ein Managementsystem für Informationssicherheit (ISMS). Er beschreibt nicht die Vorgehensweise der IT-Grundschutz-Methodik (das ist 200-2) und auch nicht das Notfallmanagement (200-4).',
-                'source' => 'BSI-Standard 200-1, Einleitung',
+                'quote' => 'Im BSI-Standard 200-1 Managementsysteme für Informationssicherheit (ISMS) wird beschrieben, mit welchen Methoden Informationssicherheit in einer Institution generell initiiert und gesteuert werden kann.',
+                'source' => 'BSI-Standard 200-2, Kapitel 1.4, S. 9',
                 'answers' => [
                     ['text' => 'Anforderungen an ein ISMS', 'is_correct' => true],
                     ['text' => 'Die IT-Grundschutz-Vorgehensweise', 'is_correct' => false],
@@ -45,7 +47,8 @@ class SampleQuestionsSeeder extends Seeder
             [
                 'text' => 'Welche Schutzbedarfskategorien kennt der IT-Grundschutz?',
                 'explanation' => 'Der IT-Grundschutz definiert drei Schutzbedarfskategorien: normal, hoch und sehr hoch. Die Kategorie "kritisch" existiert im IT-Grundschutz nicht.',
-                'source' => 'BSI-Standard 200-2, Kapitel 6.2',
+                'quote' => '„normal" Die Schadensauswirkungen sind begrenzt und überschaubar. „hoch" Die Schadensauswirkungen können beträchtlich sein. „sehr hoch" Die Schadensauswirkungen können ein existenziell bedrohliches, katastrophales Ausmaß erreichen.',
+                'source' => 'BSI-Standard 200-2, Kapitel 8.2.1, S. 104',
                 'answers' => [
                     ['text' => 'Normal', 'is_correct' => true],
                     ['text' => 'Hoch', 'is_correct' => true],

@@ -25,6 +25,7 @@ it('displays a random question for a module', function () {
             ->has('id')
             ->has('text')
             ->has('explanation')
+            ->has('quote')
             ->has('source')
             ->has('answers', 4)
             ->etc()

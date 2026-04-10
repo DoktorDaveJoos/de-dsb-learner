@@ -27,6 +27,7 @@ class QuizController extends Controller
                 'id' => $question->id,
                 'text' => $question->text,
                 'explanation' => $question->explanation,
+                'quote' => $question->quote,
                 'source' => $question->source,
                 'answers' => $question->answers->map(fn ($a) => [
                     'id' => $a->id,

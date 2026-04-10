@@ -8,6 +8,7 @@ export type Question = {
     id: number;
     text: string;
     explanation: string | null;
+    quote: string | null;
     source: string | null;
     answers: Answer[];
 };

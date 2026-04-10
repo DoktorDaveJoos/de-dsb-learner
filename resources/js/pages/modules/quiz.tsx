@@ -46,11 +46,11 @@ export default function Quiz({ module, question }: Props) {
             return selected.includes(answer.id) ? 'border-foreground' : 'border-border';
         }
 
-        if (answer.is_correct) {
+        if (selected.includes(answer.id) && answer.is_correct) {
             return 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950';
         }
 
-        if (selected.includes(answer.id) && !answer.is_correct) {
+        if (selected.includes(answer.id) !== answer.is_correct) {
             return 'border-red-600 bg-red-50 dark:bg-red-950';
         }
 
@@ -89,7 +89,7 @@ export default function Quiz({ module, question }: Props) {
                                     onClick={() => toggleAnswer(answer.id)}
                                     disabled={checked}
                                     className={cn(
-                                        'flex items-center gap-3 rounded-lg border p-4 text-left transition-colors',
+                                        'flex items-center gap-3 rounded-lg border p-4 text-left transition-colors cursor-pointer',
                                         !checked &&
                                             !selected.includes(answer.id) &&
                                             'hover:bg-accent',
@@ -97,13 +97,10 @@ export default function Quiz({ module, question }: Props) {
                                     )}
                                 >
                                     <Checkbox
-                                        checked={
-                                            checked
-                                                ? answer.is_correct || selected.includes(answer.id)
-                                                : selected.includes(answer.id)
-                                        }
+                                        checked={selected.includes(answer.id)}
                                         disabled={checked}
                                         tabIndex={-1}
+                                        className="pointer-events-none"
                                     />
                                     <span className="text-sm">{answer.text}</span>
                                 </button>
@@ -123,11 +120,23 @@ export default function Quiz({ module, question }: Props) {
                                     {isCorrect ? 'Richtig!' : 'Leider falsch.'}
                                 </div>
 
-                                {question.explanation && (
+                                {(question.explanation || question.quote) && (
                                     <div className="rounded-lg border bg-muted/50 p-4">
-                                        <p className="text-sm leading-relaxed text-muted-foreground">
-                                            {question.explanation}
-                                        </p>
+                                        {question.quote && (
+                                            <p className="text-sm leading-relaxed italic text-muted-foreground">
+                                                &bdquo;{question.quote}&ldquo;
+                                            </p>
+                                        )}
+                                        {question.explanation && (
+                                            <p
+                                                className={cn(
+                                                    'text-sm leading-relaxed text-muted-foreground',
+                                                    question.quote && 'mt-3',
+                                                )}
+                                            >
+                                                {question.explanation}
+                                            </p>
+                                        )}
                                         {question.source && (
                                             <p className="mt-2 text-xs text-muted-foreground/70">
                                                 Quelle: {question.source}
@@ -143,12 +152,12 @@ export default function Quiz({ module, question }: Props) {
                             <Button
                                 onClick={checkAnswers}
                                 disabled={selected.length === 0}
-                                className="w-full"
+                                className="w-full cursor-pointer"
                             >
                                 Prüfen
                             </Button>
                         ) : (
-                            <Button onClick={nextQuestion} className="w-full">
+                            <Button onClick={nextQuestion} className="w-full cursor-pointer">
                                 Nächste Frage
                             </Button>
                         )}

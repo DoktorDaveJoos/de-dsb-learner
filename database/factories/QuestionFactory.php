@@ -15,6 +15,7 @@ class QuestionFactory extends Factory
             'module_id' => Module::factory(),
             'text' => fake()->sentence().'?',
             'explanation' => fake()->paragraph(),
+            'quote' => fake()->paragraph(),
             'source' => fake()->sentence(),
         ];
     }

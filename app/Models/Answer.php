@@ -14,6 +14,10 @@ class Answer extends Model
     /** @use HasFactory<AnswerFactory> */
     use HasFactory;
 
+    protected $casts = [
+        'is_correct' => 'boolean',
+    ];
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
