@@ -13,13 +13,11 @@ class QuizController extends Controller
     {
         $exclude = $request->integer('exclude');
 
-        $query = $module->questions()->with('answers');
-
-        if ($exclude && $module->questions()->count() > 1) {
-            $query->where('id', '!=', $exclude);
-        }
-
-        $question = $query->inRandomOrder()->firstOrFail();
+        $question = $module->questions()
+            ->with('answers')
+            ->when($exclude, fn ($q) => $q->where('id', '!=', $exclude))
+            ->inRandomOrder()
+            ->firstOr(fn () => $module->questions()->with('answers')->inRandomOrder()->firstOrFail());
 
         $question->setRelation('answers', $question->answers->shuffle());
 

@@ -23,8 +23,8 @@ export default function Quiz({ module, question }: Props) {
 
     function toggleAnswer(answerId: number) {
         if (checked) {
-return;
-}
+            return;
+        }
 
         setSelected((prev) =>
             prev.includes(answerId) ? prev.filter((id) => id !== answerId) : [...prev, answerId],
@@ -57,13 +57,8 @@ return;
         return 'border-border opacity-60';
     }
 
-    const allCorrectSelected = question.answers
-        .filter((a) => a.is_correct)
-        .every((a) => selected.includes(a.id));
-    const noWrongSelected = selected.every(
-        (id) => question.answers.find((a) => a.id === id)?.is_correct,
-    );
-    const isCorrect = checked && allCorrectSelected && noWrongSelected;
+    const isCorrect =
+        checked && question.answers.every((a) => a.is_correct === selected.includes(a.id));
 
     return (
         <>
