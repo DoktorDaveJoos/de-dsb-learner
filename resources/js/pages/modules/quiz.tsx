@@ -163,6 +163,17 @@ export default function Quiz({ module, question }: Props) {
                         )}
                     </CardFooter>
                 </Card>
+
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                    <a
+                        href="https://davidjoos.de"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-foreground"
+                    >
+                        davidjoos.de
+                    </a>
+                </p>
             </div>
         </>
     );
