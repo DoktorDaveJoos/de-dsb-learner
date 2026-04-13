@@ -6,11 +6,14 @@ use App\Models\Module;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Pulse\Facades\Pulse;
 
 class QuizController extends Controller
 {
     public function show(Request $request, Module $module): Response
     {
+        Pulse::record('module_view', $module->slug)->count();
+
         $exclude = $request->integer('exclude');
 
         $question = $module->questions()

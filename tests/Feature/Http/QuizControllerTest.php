@@ -3,6 +3,7 @@
 use App\Models\Answer;
 use App\Models\Module;
 use App\Models\Question;
+use Laravel\Pulse\Facades\Pulse;
 
 it('displays a random question for a module', function () {
     $module = Module::factory()->create();
@@ -67,4 +68,20 @@ it('returns 404 for non-existent module', function () {
     $response = $this->get('/module/non-existent');
 
     $response->assertNotFound();
+});
+
+it('records a module_view pulse entry when viewing a module', function () {
+    Pulse::startRecording();
+
+    $module = Module::factory()->create();
+    Question::factory()->for($module)->has(Answer::factory(4))->create();
+
+    $this->get("/module/{$module->slug}");
+
+    Pulse::ingest();
+
+    $this->assertDatabaseHas('pulse_entries', [
+        'type' => 'module_view',
+        'key' => $module->slug,
+    ]);
 });
