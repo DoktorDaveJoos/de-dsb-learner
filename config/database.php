@@ -99,6 +99,20 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        'pulse' => [
+            'driver' => 'pgsql',
+            'host' => env('PULSE_DB_HOST', '127.0.0.1'),
+            'port' => env('PULSE_DB_PORT', '5438'),
+            'database' => env('PULSE_DB_DATABASE', 'pulse'),
+            'username' => env('PULSE_DB_USERNAME', 'postgres'),
+            'password' => env('PULSE_DB_PASSWORD', ''),
+            'charset' => env('PULSE_DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('PULSE_DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
