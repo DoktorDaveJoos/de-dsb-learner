@@ -13,6 +13,7 @@
         @if ($modules->isEmpty())
             <x-pulse::no-results />
         @else
+            @php $maxCount = $modules->first()->count; @endphp
             <x-pulse::table>
                 <colgroup>
                     <col width="0%" />
@@ -36,10 +37,7 @@
                                 <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="{{ $module->key }}">
                                     {{ $module->key }}
                                 </code>
-                                @php
-                                    $maxCount = $modules->first()->count;
-                                    $percentage = $maxCount > 0 ? ($module->count / $maxCount) * 100 : 0;
-                                @endphp
+                                @php $percentage = $maxCount > 0 ? ($module->count / $maxCount) * 100 : 0; @endphp
                                 <div class="mt-1 w-full h-1 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                                     <div class="h-full rounded-full bg-violet-500" style="width: {{ $percentage }}%"></div>
                                 </div>

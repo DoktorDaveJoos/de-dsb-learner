@@ -10,9 +10,8 @@
         <x-slot:actions>
             <div class="flex flex-wrap gap-4">
                 @foreach ($modules as $slug => $readings)
-                    @php $color = $colors[abs(crc32($slug)) % count($colors)]; @endphp
                     <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 font-medium">
-                        <div class="h-0.5 w-3 rounded-full" style="background: {{ $color }}"></div>
+                        <div class="h-0.5 w-3 rounded-full" style="background: {{ $moduleColors[$slug] }}"></div>
                         {{ $slug }}
                     </div>
                 @endforeach
@@ -37,7 +36,7 @@
                     class="h-36"
                     x-data="moduleViewsChart({
                         modules: @js($modules),
-                        colors: @js($colors),
+                        moduleColors: @js($moduleColors),
                     })"
                 >
                     <canvas x-ref="canvas" class="ring-1 ring-gray-900/5 dark:ring-gray-100/10 bg-gray-50 dark:bg-gray-800 rounded-md shadow-sm"></canvas>
@@ -51,24 +50,9 @@
 <script>
 Alpine.data('moduleViewsChart', (config) => ({
     init() {
-        const slugs = Object.keys(config.modules)
-        const firstSlug = slugs[0]
-        const firstReadings = config.modules[firstSlug]?.module_view ?? {}
-        const labels = Object.keys(firstReadings).map(formatDate)
-
-        const datasets = slugs.map((slug, i) => {
-            const color = config.colors[Math.abs(this.hashCode(slug)) % config.colors.length]
-            return {
-                label: slug,
-                borderColor: color,
-                data: Object.values(config.modules[slug]?.module_view ?? {}),
-                order: i,
-            }
-        })
-
         let chart = new Chart(this.$refs.canvas, {
             type: 'line',
-            data: { labels, datasets },
+            data: this.buildData(config.modules, config.moduleColors),
             options: {
                 maintainAspectRatio: false,
                 layout: {
@@ -109,22 +93,29 @@ Alpine.data('moduleViewsChart', (config) => ({
             },
         })
 
-        Livewire.on('module-views-chart-update', ({ modules }) => {
+        Livewire.on('module-views-chart-update', ({ modules, moduleColors }) => {
             if (chart === undefined) return
 
-            const newSlugs = Object.keys(modules)
-            const firstData = modules[newSlugs[0]]?.module_view ?? {}
-            chart.data.labels = Object.keys(firstData).map(formatDate)
+            const newData = this.buildData(modules, moduleColors)
+            chart.data.labels = newData.labels
+            chart.data.datasets = newData.datasets
             chart.options.scales.y.max = this.highest(modules)
-
-            newSlugs.forEach((slug, i) => {
-                if (chart.data.datasets[i]) {
-                    chart.data.datasets[i].data = Object.values(modules[slug]?.module_view ?? {})
-                }
-            })
-
             chart.update()
         })
+    },
+    buildData(modules, moduleColors) {
+        const slugs = Object.keys(modules)
+        const firstReadings = modules[slugs[0]]?.module_view ?? {}
+        const labels = Object.keys(firstReadings).map(formatDate)
+
+        const datasets = slugs.map((slug, i) => ({
+            label: slug,
+            borderColor: moduleColors[slug],
+            data: Object.values(modules[slug]?.module_view ?? {}),
+            order: i,
+        }))
+
+        return { labels, datasets }
     },
     highest(modules) {
         return Math.max(
@@ -132,14 +123,6 @@ Alpine.data('moduleViewsChart', (config) => ({
                 readings => Math.max(...Object.values(readings.module_view ?? {}))
             )
         ) || 1
-    },
-    hashCode(str) {
-        let hash = 0
-        for (let i = 0; i < str.length; i++) {
-            hash = ((hash << 5) - hash) + str.charCodeAt(i)
-            hash |= 0
-        }
-        return hash
     },
 }))
 </script>

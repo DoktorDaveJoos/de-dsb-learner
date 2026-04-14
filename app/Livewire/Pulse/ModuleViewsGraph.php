@@ -11,20 +11,15 @@ use Livewire\Livewire;
 #[Lazy]
 class ModuleViewsGraph extends Card
 {
-    /**
-     * The pre-defined chart colors for modules.
-     *
-     * @var array<int, string>
-     */
-    protected array $colors = [
-        '#8b5cf6', // violet
-        '#06b6d4', // cyan
-        '#f59e0b', // amber
-        '#10b981', // emerald
-        '#f43f5e', // rose
-        '#6366f1', // indigo
-        '#14b8a6', // teal
-        '#e879f9', // fuchsia
+    private const COLORS = [
+        '#8b5cf6',
+        '#06b6d4',
+        '#f59e0b',
+        '#10b981',
+        '#f43f5e',
+        '#6366f1',
+        '#14b8a6',
+        '#e879f9',
     ];
 
     public function render(): Renderable
@@ -33,13 +28,17 @@ class ModuleViewsGraph extends Card
             fn () => $this->graph(['module_view'], 'count'),
         );
 
+        $moduleColors = $modules->keys()->mapWithKeys(fn ($slug) => [
+            $slug => self::COLORS[abs(crc32((string) $slug)) % count(self::COLORS)],
+        ]);
+
         if (Livewire::isLivewireRequest()) {
-            $this->dispatch('module-views-chart-update', modules: $modules);
+            $this->dispatch('module-views-chart-update', modules: $modules, moduleColors: $moduleColors);
         }
 
         return View::make('livewire.pulse.module-views-graph', [
             'modules' => $modules,
-            'colors' => $this->colors,
+            'moduleColors' => $moduleColors,
             'time' => $time,
             'runAt' => $runAt,
         ]);
