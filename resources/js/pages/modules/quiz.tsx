@@ -76,6 +76,9 @@ export default function Quiz({ module, question }: Props) {
 
                 <Card>
                     <CardHeader>
+                        <div className="mb-2 text-xs font-mono text-muted-foreground">
+                            Frage #{question.id}
+                        </div>
                         <CardTitle className="text-lg font-medium leading-relaxed">
                             {question.text}
                         </CardTitle>

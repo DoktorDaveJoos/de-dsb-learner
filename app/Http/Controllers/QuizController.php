@@ -15,12 +15,26 @@ class QuizController extends Controller
         Pulse::record('module_view', $module->slug)->count();
 
         $exclude = $request->integer('exclude');
+        $sessionKey = "quiz.seen.{$module->slug}";
+        $seen = $request->session()->get($sessionKey, []);
 
         $question = $module->questions()
             ->with('answers')
+            ->whereNotIn('id', $seen)
             ->when($exclude, fn ($q) => $q->where('id', '!=', $exclude))
             ->inRandomOrder()
-            ->firstOr(fn () => $module->questions()->with('answers')->inRandomOrder()->firstOrFail());
+            ->first();
+
+        if (! $question) {
+            $seen = [];
+            $question = $module->questions()
+                ->with('answers')
+                ->when($exclude, fn ($q) => $q->where('id', '!=', $exclude))
+                ->inRandomOrder()
+                ->firstOr(fn () => $module->questions()->with('answers')->inRandomOrder()->firstOrFail());
+        }
+
+        $request->session()->put($sessionKey, array_values(array_unique([...$seen, $question->id])));
 
         $question->setRelation('answers', $question->answers->shuffle());
 

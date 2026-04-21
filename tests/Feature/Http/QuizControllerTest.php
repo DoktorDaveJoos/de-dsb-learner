@@ -70,6 +70,44 @@ it('returns 404 for non-existent module', function () {
     $response->assertNotFound();
 });
 
+it('cycles through all questions before repeating any', function () {
+    $module = Module::factory()->create();
+    $questions = Question::factory(3)
+        ->for($module)
+        ->has(Answer::factory(4))
+        ->create();
+
+    $seenIds = [];
+
+    for ($i = 0; $i < 3; $i++) {
+        $response = $this->get("/module/{$module->slug}");
+        $response->assertOk();
+
+        $id = $response->viewData('page')['props']['question']['id'];
+        $seenIds[] = $id;
+    }
+
+    expect($seenIds)->toHaveCount(3);
+    expect(array_unique($seenIds))->toHaveCount(3);
+    expect(array_values(array_intersect($questions->pluck('id')->all(), $seenIds)))
+        ->toEqualCanonicalizing($questions->pluck('id')->all());
+});
+
+it('resets the shuffle bag once all questions have been seen', function () {
+    $module = Module::factory()->create();
+    Question::factory(2)
+        ->for($module)
+        ->has(Answer::factory(4))
+        ->create();
+
+    $this->get("/module/{$module->slug}");
+    $this->get("/module/{$module->slug}");
+
+    $response = $this->get("/module/{$module->slug}");
+    $response->assertOk();
+    expect($response->viewData('page')['props']['question']['id'])->not->toBeNull();
+});
+
 it('records a module_view pulse entry when viewing a module', function () {
     Pulse::startRecording();
 
