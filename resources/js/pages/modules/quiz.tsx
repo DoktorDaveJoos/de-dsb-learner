@@ -164,6 +164,30 @@ export default function Quiz({ module, question }: Props) {
                     </CardFooter>
                 </Card>
 
+                <a
+                    href="https://pruefungstrainer.davidjoos.de"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group mt-6 flex items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/5 p-4 transition-colors hover:bg-primary/10"
+                >
+                    <div className="flex flex-col gap-1">
+                        <span className="text-sm font-semibold text-foreground">
+                            Bereit für den Ernstfall? Jetzt Prüfungssimulation starten
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                            60 Minuten, 50 Fragen &ndash; genau wie in der echten BSI-Prüfung.
+                            Über 900 Fragen im Pool, gezielt falsche wiederholen und Fortschritt
+                            mit Tracking &amp; Insights im Blick behalten.
+                        </span>
+                    </div>
+                    <span
+                        aria-hidden="true"
+                        className="text-foreground transition-transform group-hover:translate-x-0.5"
+                    >
+                        &rarr;
+                    </span>
+                </a>
+
                 <p className="mt-4 text-center text-sm text-muted-foreground">
                     <a
                         href="https://davidjoos.de"
