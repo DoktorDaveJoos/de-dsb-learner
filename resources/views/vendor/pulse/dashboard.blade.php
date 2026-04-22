@@ -11,5 +11,7 @@
 
     <livewire:pulse.slow-requests cols="6" />
 
+    <livewire:pulse.usage cols="6" />
+
     <livewire:pulse.cache cols="6" />
 </x-pulse>
